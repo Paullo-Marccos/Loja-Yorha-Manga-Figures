@@ -66,39 +66,6 @@ Web Audio API para geração de efeitos sonoros em tempo real.
 
 Web Storage API (localStorage) para salvar itens do carrinho e preferências do usuário.
 
-📂 Estrutura de Pastas
-
-.
-├── index.html          # Estrutura principal do HTML
-├── css/
-│   └── index.css       # Estilização completa e temas visuais
-├── java/
-│   └── index.js        # Lógica de negócios, carrinho e efeitos de áudio
-├── img/                # Imagens dos produtos e backgrounds
-│   ├── logoyorha.png
-│   ├── 2bbackground.png
-│   └── ... (imagens de figures e mangás)
-└── audio/              # Trilha sonora do projeto
-    └── trilha.mp3
-
-
-💻 Como Executar o Projeto
-
-Clone o repositório:
-
-git clone https://github.com/Paullo-Marccos/yorha-manga-figures.git
-
-
-Navegue até a pasta do projeto:
-
-cd yorha-manga-figures
-
-
-Abra o projeto:
-
-Basta abrir o arquivo index.html em qualquer navegador web de sua preferência, ou utilizar uma extensão como o Live Server no VS Code.
-
-👤 Autor
 
 Desenvolvido por Paullo-Marccos
 
