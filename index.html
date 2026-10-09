@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Paullo-Marccos">
+    <meta name="google" content="notranslate">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Loja Yorha Manga &amp; Figures</title>
+</head>
+<body>
+
+    <!-- Terminal de boot (tela de entrada, também libera a música) -->
+    <div id="boot" class="boot" role="dialog" aria-label="Iniciar sistema">
+        <pre id="boot-log"></pre>
+        <button id="boot-btn" class="boot-btn" hidden>[ INICIAR SISTEMA ]</button>
+    </div>
+
+    <div id="mira" class="mira" aria-hidden="true"></div>
+
+    <!-- Pod 042: assistente que comenta suas ações (clique nele para ouvir dicas) -->
+    <div class="pod">
+        <button id="pod-corpo" class="pod-corpo" aria-label="Pod 042: ouvir uma dica">042</button>
+        <p id="pod-fala" class="pod-fala" role="status" aria-live="polite"></p>
+    </div>
+
+    <!-- Botões flutuantes -->
+    <button id="btn-musica" class="btn-flutuante btn-musica" aria-label="Ligar ou desligar a música" aria-pressed="false">🔇</button>
+    <button id="btn-carrinho" class="btn-flutuante btn-carrinho" aria-label="Abrir carrinho">
+        🛒
+        <span id="carrinho-contador" class="contador oculto">0</span>
+    </button>
+
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Painel lateral do carrinho (itens entram via JS) -->
+    <aside id="painel-carrinho" class="painel-carrinho" aria-label="Carrinho de compras">
+        <div class="carrinho-header">
+            <h2>Inventário</h2>
+            <button id="fechar-carrinho" class="fechar" aria-label="Fechar carrinho">✕</button>
+        </div>
+        <div id="carrinho-itens" class="carrinho-itens"></div>
+        <div class="carrinho-footer">
+            <div class="linha-total">
+                <span>Subtotal</span>
+                <span id="carrinho-subtotal">R$ 0,00</span>
+            </div>
+            <button id="btn-finalizar" class="btn-finalizar">Transmitir ao Bunker</button>
+        </div>
+    </aside>
+
+    <!-- ========== TELA INICIAL: header + carrosséis ========== -->
+    <section class="inicio">
+        <header>
+            <div class="conteudo-header">
+                <h1>
+                    <img src="img/logoyorha.png" id="logoYorha" alt="Logo Yorha">
+                    Yorha Manga &amp; Figures
+                </h1>
+                <p>
+                    O seu ponto de abastecimento definitivo na Terra. Especializada nos universos de
+                    NieR:Automata e nos mangás mais aclamados, a Yorha entrega colecionáveis de
+                    altíssima precisão e acabamento impecável. De figures detalhadas da 2B, 9S e A2
+                    às últimas edições dos seus mangás favoritos, garantimos o acervo perfeito para
+                    quem leva a arte dos colecionáveis a sério. Glória à humanidade e à sua coleção!
+                </p>
+            </div>
+        </header>
+
+        <!-- As imagens são criadas pelo JS a partir da lista de produtos -->
+        <div class="faixa"><div class="track track-direita"></div></div>
+        <div class="faixa"><div class="track track-esquerda"></div></div>
+
+        <a href="#loja" class="ver-produtos">Acessar acervo ↓</a>
+    </section>
+
+    <!-- ========== LOJA ========== -->
+    <section id="loja">
+        <nav aria-label="Categorias">
+            <a href="#figures">Action Figures</a>
+            <a href="#mangas">Mangás</a>
+        </nav>
+
+        <div class="tabelas">
+            <div class="coluna" id="figures">
+                <h2>Action Figures</h2>
+                <table>
+                    <thead>
+                        <tr><th><span class="so-leitor">Imagem</span></th><th>Produto</th><th>Preço</th><th>Quantidade</th><th>Total</th></tr>
+                    </thead>
+                    <tbody id="lista-figures"></tbody>
+                </table>
+            </div>
+
+            <div class="coluna" id="mangas">
+                <h2>Mangás</h2>
+                <table>
+                    <thead>
+                        <tr><th><span class="so-leitor">Imagem</span></th><th>Produto</th><th>Preço</th><th>Quantidade</th><th>Total</th></tr>
+                    </thead>
+                    <tbody id="lista-mangas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <span id="rodape-itens">0 itens</span>
+            <strong>Subtotal: <span id="rodape-subtotal">R$ 0,00</span></strong>
+        </footer>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- Renomeie o seu mp3 para audio/trilha.mp3 (ou mude o caminho aqui) -->
+    <audio id="trilha" src="audio/A Beautiful Song (NieRAutomata Original Soundtrack)【Audio】 - SQUARE ENIX MUSIC Channel.mp3" loop preload="none"></audio>
+
+    <script src="java/index.js"></script>
+</body>
+</html>

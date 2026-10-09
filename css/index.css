@@ -1,0 +1,473 @@
+/* ==========================================================
+   BASE
+   ========================================================== */
+:root {
+    --fundo: #000;
+    --texto: #f1efe6;
+    --acento: #d1cdb7;              /* bege "YoRHa" */
+    --linha: #2c2a25;
+    --card: rgba(209, 205, 183, 0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }   /* DICA: faz o clique em #links deslizar em vez de pular */
+
+body {
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow-x: hidden;
+}
+
+button { font: inherit; }
+
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+.so-leitor {                        /* texto só para leitores de tela */
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+/* ==========================================================
+   TELA INICIAL (header + carrosséis = 1 tela)
+   ========================================================== */
+.inicio {
+    min-height: 100vh;
+    min-height: 100svh;             /* DICA: svh ignora a barra do navegador no celular */
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    position: relative;
+    flex: 1;                        /* ocupa o espaço que sobrar na tela */
+    min-height: 260px;
+    padding: 50px 40px;
+    display: flex;
+    align-items: center;
+
+    background: #000 url('../img/2bbackground.png') 10% 30% / cover no-repeat;
+    /* DICA: "10% 30%" = horizontal vertical. Vertical maior = rosto sobe; menor = rosto desce */
+    overflow: hidden;
+}
+
+/* Escurece a esquerda para o texto ficar legível */
+header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+        rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 40%, rgba(0,0,0,.4) 60%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* FADE: a base da imagem se dissolve no preto da página */
+header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 55%, var(--fundo) 100%);
+    /* DICA: 55% = onde o fade começa. Menor = fade mais longo */
+    z-index: 1;
+    pointer-events: none;
+}
+
+.conteudo-header { position: relative; z-index: 2; max-width: 600px; }
+
+.conteudo-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 50px;
+}
+
+#logoYorha { height: 50px; width: auto; }
+
+.conteudo-header p { line-height: 1.7; font-size: 20px; }
+
+.ver-produtos {
+    align-self: center;
+    margin: 4px 0 14px;
+    padding: 8px 22px;
+    color: var(--texto);
+    border: 1px solid var(--acento);
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background .25s, color .25s;
+}
+.ver-produtos:hover { background: var(--acento); color: #000; }
+
+/* ==========================================================
+   CARROSSEL
+   ========================================================== */
+.faixa { overflow: hidden; white-space: nowrap; margin: 12px 16px; }
+
+.track { display: flex; width: max-content; }
+
+.faixa:hover .track { animation-play-state: paused; }
+
+.galeria { display: flex; flex-shrink: 0; }
+
+/* DICA: 50s = velocidade (menor = mais rápido) */
+.track-direita  { animation: mover-direita  50s linear infinite; }
+.track-esquerda { animation: mover-esquerda 50s linear infinite; }
+
+/* DICA: -50% funciona porque a galeria é duplicada (loop sem pulo) */
+@keyframes mover-direita  { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes mover-esquerda { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.track a { display: block; flex-shrink: 0; }
+
+.track img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 5px;
+    object-fit: cover;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform .6s ease, opacity .25s, filter .25s;
+}
+.track:hover img { opacity: .5; filter: grayscale(40%); }
+.track img:hover { opacity: 1; filter: none; transform: scale(1.12); box-shadow: 0 8px 20px #000; position: relative; z-index: 2; }
+
+@media (max-width: 600px) { .track img { width: 150px; height: 150px; } }
+
+/* ==========================================================
+   LOJA
+   ========================================================== */
+#loja { padding: 40px 16px 0; }
+
+nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+nav a {
+    padding: 8px 20px;
+    border: 1px solid var(--linha);
+    border-radius: 30px;
+    color: var(--texto);
+    text-decoration: none;
+    transition: border-color .2s, background .2s;
+}
+nav a:hover { border-color: var(--acento); background: var(--card); }
+
+.tabelas {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* DICA: 2 colunas iguais */
+    gap: 24px;
+    align-items: start;
+}
+.coluna { min-width: 0; scroll-margin-top: 20px; }
+.coluna h2 { margin-bottom: 12px; font-weight: normal; letter-spacing: .04em; }
+
+table { width: 100%; border-collapse: collapse; }
+
+th { padding: 12px 8px; text-align: center; font-weight: normal; color: var(--acento); border-bottom: 1px solid var(--acento); }
+td { padding: 12px 8px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--linha); }
+
+td img { display: block; width: 100px; height: 100px; object-fit: cover; border-radius: 12px; }
+
+.descproduto { text-align: left; }
+.descproduto strong { display: block; margin-bottom: 4px; font-size: 1.05rem; font-weight: normal; }
+.descproduto span { display: block; font-size: .85rem; color: #9a9684; }
+
+/* Linha que já está no carrinho */
+tr.no-carrinho { background: var(--card); }
+
+/* Linha destacada ao clicar no carrossel */
+tr { scroll-margin-top: 80px; }
+tr:target { outline: 2px solid var(--acento); outline-offset: -2px; animation: piscar 1.2s ease 2; }
+@keyframes piscar { 50% { background: rgba(209, 205, 183, .3); } }
+
+/* Controle de quantidade */
+.quantidade { display: inline-flex; align-items: center; gap: 10px; }
+.quantidade button {
+    width: 32px; height: 32px;
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+    background: #1a1917;
+    color: var(--texto);
+    font-size: 18px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+}
+.quantidade button:hover { background: #38362f; }
+.quantidade button:active { transform: scale(.9); }
+.qtd-valor { min-width: 24px; text-align: center; font-weight: bold; }
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 32px -16px 0;
+    padding: 20px 24px;
+    border-top: 1px solid var(--acento);
+    background: var(--card);
+}
+
+@media (max-width: 900px) {
+    .tabelas { grid-template-columns: 1fr; }   /* DICA: 1 coluna = uma tabela embaixo da outra */
+}
+@media (max-width: 768px) {
+    header { padding: 40px 20px; background-position: center 30%; }
+    header::before { background: rgba(0,0,0,.7); }
+    .conteudo-header h1 { font-size: 1.6rem; }
+    .conteudo-header p { font-size: 1rem; }
+    th, td { padding: 8px 4px; font-size: .85rem; }
+    td img { width: 64px; height: 64px; }
+}
+
+/* ==========================================================
+   BOTÕES FLUTUANTES
+   ========================================================== */
+.btn-flutuante {
+    position: fixed;
+    right: 20px;
+    width: 52px; height: 52px;
+    border: 1px solid var(--acento);
+    border-radius: 50%;
+    background: #1a1917;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+    z-index: 1000;
+    transition: transform .2s, background .2s;
+}
+.btn-flutuante:hover { background: #38362f; transform: scale(1.08); }
+.btn-carrinho { top: 20px; }
+.btn-musica   { top: 84px; }
+
+.btn-carrinho.pulsar { animation: pulsar .4s ease; }
+@keyframes pulsar { 50% { transform: scale(1.25); } }
+
+.contador {
+    position: absolute;
+    top: -6px; right: -6px;
+    min-width: 22px; height: 22px;
+    padding: 0 5px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: #e63946;
+    font-size: 12px; font-weight: bold;
+}
+.contador.oculto { display: none; }
+
+/* ==========================================================
+   PAINEL DO CARRINHO
+   ========================================================== */
+.overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.6);
+    opacity: 0; visibility: hidden;
+    transition: opacity .3s, visibility .3s;
+    z-index: 1001;
+}
+.overlay.ativo { opacity: 1; visibility: visible; }
+
+.painel-carrinho {
+    position: fixed;
+    top: 0; right: 0;
+    width: 380px; max-width: 90vw;
+    height: 100vh; height: 100dvh;
+    display: flex; flex-direction: column;
+    background: #fff; color: #000;
+    box-shadow: -4px 0 20px rgba(0,0,0,.4);
+    transform: translateX(100%);
+    visibility: hidden;             /* fechado: some também para o teclado */
+    transition: transform .35s ease, visibility .35s;
+    z-index: 1002;
+}
+.painel-carrinho.aberto { transform: translateX(0); visibility: visible; }
+
+.carrinho-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #eee; }
+.carrinho-header h2 { font-size: 1.2rem; }
+.fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: #666; }
+.fechar:hover { color: #000; }
+
+.carrinho-itens { flex: 1; overflow-y: auto; padding: 20px; }
+.carrinho-vazio { text-align: center; color: #888; margin-top: 40px; line-height: 1.6; }
+
+.item-carrinho { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+.item-carrinho img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+.item-info { flex: 1; font-size: .9rem; }
+.item-info .nome { display: block; font-weight: bold; margin-bottom: 2px; }
+.item-info .preco { display: block; margin-bottom: 6px; color: #666; font-size: .85rem; }
+.item-acoes { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: .9rem; }
+
+.quantidade.mini { gap: 6px; }
+.quantidade.mini button { width: 26px; height: 26px; font-size: 15px; background: #eee; color: #000; border-color: #ddd; }
+.quantidade.mini button:hover { background: #ddd; }
+
+.btn-remover { background: none; border: none; color: #e63946; cursor: pointer; font-size: 14px; }
+.btn-remover:hover { text-decoration: underline; }
+
+.carrinho-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
+.linha-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; font-weight: bold; }
+.btn-finalizar { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #28a745; color: #fff; font-weight: bold; cursor: pointer; transition: background .2s; }
+.btn-finalizar:hover { background: #218838; }
+
+/* ==========================================================
+   AVISO (toast)
+   ========================================================== */
+.toast {
+    position: fixed;
+    left: 50%; bottom: 24px;
+    transform: translate(-50%, 20px);
+    padding: 12px 22px;
+    border: 1px solid var(--acento);
+    border-radius: 8px;
+    background: #1a1917;
+    opacity: 0; visibility: hidden;
+    transition: opacity .3s, transform .3s, visibility .3s;
+    z-index: 1100;
+}
+.toast.ativo { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+/* Respeita quem desativa animações no sistema */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .track { animation: none !important; }
+}
+
+/* ==========================================================
+   TEMA NIER:AUTOMATA
+   ========================================================== */
+:root { --tinta: #1c1a16; --mono: 'Courier New', Courier, monospace; }
+
+::selection { background: var(--acento); color: var(--tinta); }
+body.travado { overflow: hidden; }
+
+/* Barra de rolagem fina */
+html { scrollbar-width: thin; scrollbar-color: var(--acento) #000; }
+
+/* Linhas de varredura (tela CRT) por cima de tudo */
+body::after {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 3100;
+    background: repeating-linear-gradient(to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 3px);
+}
+
+/* Fonte de terminal nos elementos de interface */
+h1, h2, th, nav a, .ver-produtos, .quantidade button, .btn-finalizar, footer, .toast { font-family: var(--mono); }
+.coluna h2::before { content: '■ '; color: var(--acento); }
+
+/* Glitch no título ao passar o mouse */
+.conteudo-header h1:hover { animation: glitch .45s steps(2) infinite; }
+@keyframes glitch {
+    0%   { text-shadow: 2px 0 #e63946, -2px 0 #3be3ff; transform: translate(0); }
+    25%  { text-shadow: -3px 0 #e63946, 3px 0 #3be3ff; transform: translate(-2px, 1px); }
+    50%  { text-shadow: 3px 0 #e63946, -3px 0 #3be3ff; transform: translate(2px, -1px); }
+    100% { text-shadow: none; transform: none; }
+}
+
+/* Cursor piscando enquanto o texto é digitado */
+.digitando::after { content: '▌'; margin-left: 2px; animation: piscar-cursor .7s steps(1) infinite; }
+@keyframes piscar-cursor { 50% { opacity: 0; } }
+
+/* Seleção estilo menu do jogo: a linha inverte as cores */
+tbody tr { transition: background .15s, color .15s; }
+tbody tr:hover { background: var(--acento); color: var(--tinta); }
+tbody tr:hover .descproduto span { color: #4a4640; }
+tbody tr:hover td:first-child { box-shadow: inset 6px 0 var(--tinta); }
+
+/* Cantos de HUD nas colunas */
+.coluna { position: relative; padding: 14px; }
+.coluna::before, .coluna::after {
+    content: ''; position: absolute; width: 18px; height: 18px; border: 2px solid var(--acento); pointer-events: none;
+}
+.coluna::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.coluna::after  { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+/* Carrossel em tom envelhecido */
+.track img { filter: sepia(.3) contrast(1.05); }
+
+/* ---------- Terminal de boot ---------- */
+.boot {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    gap: 24px;
+    padding: 8vw;
+    background: #000;
+    color: var(--acento);
+    font-family: var(--mono);
+    z-index: 3000;
+    transition: opacity .7s, visibility .7s;
+}
+.boot.saindo { opacity: 0; visibility: hidden; }
+.boot pre { font: inherit; line-height: 1.8; white-space: pre-wrap; }
+.boot-btn {
+    padding: 10px 22px;
+    border: 1px solid var(--acento);
+    background: transparent;
+    color: var(--acento);
+    font-family: var(--mono);
+    cursor: pointer;
+    animation: piscar-cursor 1.2s steps(1) infinite;
+}
+.boot-btn:hover, .boot-btn:focus-visible { background: var(--acento); color: var(--tinta); animation: none; }
+
+/* ---------- Pod 042 ---------- */
+.pod { position: fixed; left: 20px; bottom: 20px; display: flex; align-items: flex-end; gap: 10px; z-index: 1000; }
+.pod-corpo {
+    position: relative;
+    width: 48px; height: 48px;
+    border: 2px solid #4a4640;
+    border-radius: 10px;
+    background: var(--acento);
+    color: var(--tinta);
+    font: bold 13px var(--mono);
+    cursor: pointer;
+    animation: flutuar 3s ease-in-out infinite;
+}
+.pod-corpo::before {            /* o "olho" vermelho */
+    content: ''; position: absolute; top: 5px; left: 50%;
+    width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: #e63946;
+}
+.pod-corpo:hover { filter: brightness(1.15); }
+@keyframes flutuar { 50% { transform: translateY(-6px); } }
+
+.pod-fala {
+    max-width: min(260px, 60vw);
+    padding: 10px 14px;
+    background: var(--acento);
+    color: var(--tinta);
+    font: 13px/1.4 var(--mono);
+    opacity: 0; visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity .25s, transform .25s, visibility .25s;
+}
+.pod-fala.ativa { opacity: 1; visibility: visible; transform: none; }
+
+/* ---------- Mira do cursor ---------- */
+.mira {
+    position: fixed; top: 0; left: 0;
+    width: 0; height: 0;
+    pointer-events: none;
+    z-index: 3050;
+    opacity: 0;
+    transition: opacity .2s;
+}
+.mira.visivel { opacity: 1; }
+.mira::before {
+    content: '';
+    position: absolute; left: -14px; top: -14px;
+    width: 28px; height: 28px;
+    border: 1px solid var(--acento);
+    transition: transform .2s, border-color .2s, background .2s;
+}
+.mira.alvo::before { transform: rotate(45deg) scale(1.3); border-color: #e63946; background: rgba(230, 57, 70, .12); }
+
+/* ---------- Protocolo secreto ---------- */
+body.modo-glitch { animation: tremer .15s steps(2) infinite; filter: hue-rotate(160deg) contrast(1.2); }
+@keyframes tremer { 25% { transform: translate(-3px, 1px); } 75% { transform: translate(3px, -1px); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .pod-corpo, .boot-btn, .digitando::after, body.modo-glitch { animation: none; }
+}
