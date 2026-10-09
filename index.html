@@ -1,39 +1,83 @@
 <!DOCTYPE html>
+
+
+<!-- OLA! ESSA PARTE DO HTML, EU PEDI PRA IA COLOCAR DICAS PARA FACILITAR O ENTENDIMENTO, POREM O CSS, EU FIZ A PARTE MAIS 'ESTRUTURAL' 
+E PEDI PRA I.A ADICIONAR O POD 042, AS DICAS, E O SISTEMA DE ID DOS ITENS(CASO O USUARIO CLICASSE NO PRODUTO FOSSE REDIRECIONADO, 
+É CHATINHO DE FAZER ENTAO EU ARREGUEUI). JÁ O JAVASCRIPT, FIZ A ESTRUTURA MAIS SIMPLES, POREM COM O CONCERTO QUE A I.A FEZ, FICOU DE DIFICIL
+ENTENDIMENTO, POREM FAREI O PROJETO EM BREVE - EXPLICANDO PRINCIPALMENTE O CARRINHO DE COMPRAS, JA QUE A I.A BAGUNÇOU OS MEUS CODIGOS
+E NAO VOU REFAZER, PREFIRO FAZER OUTRO KKKKK -->
+
+
+
+<!-- ============================================================================
+     COMO LER ESTE ARQUIVO
+     Este HTML é só o ESQUELETO: tem as "caixas" (com id) e o JS preenche.
+       • class="..." → o CSS (css/index.css) usa para estilizar
+       • id="..."    → o JS (java/index.js) usa para achar o elemento: $('id')
+     Cada id aqui tem um $('mesmo-id') lá no JS. Se renomear um, renomeie o outro!
+
+     ORDEM DA PÁGINA (de cima para baixo):
+       1) terminal de boot   2) mira   3) Pod 042   4) botões flutuantes
+       5) painel do carrinho 6) TELA INICIAL (header + carrosséis)
+       7) LOJA (tabelas + rodapé)   8) toast   9) áudio   10) script
+     ============================================================================ -->
+<!-- DICA: lang="pt-br" ajuda leitores de tela (pronúncia) e buscadores. -->
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">   <!-- sem isso, acentos e emojis viram símbolos estranhos -->
+    <!-- viewport: faz a página se adaptar ao tamanho da tela do celular -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Paullo-Marccos">
+    <!-- impede o navegador de oferecer tradução automática (e bagunçar o tema) -->
     <meta name="google" content="notranslate">
+    <!-- O CSS fica no <head> para a página já nascer estilizada. Caminho relativo à pasta do index.html. -->
     <link rel="stylesheet" href="css/index.css">
-    <title>Loja Yorha Manga &amp; Figures</title>
+    <title>Loja Yorha Manga &amp; Figures</title>   <!-- &amp; = o escrito  símbolo &de forma segura em HTML -->
 </head>
 <body>
 
-    <!-- Terminal de boot (tela de entrada, também libera a música) -->
+    <!-- [1] Terminal de boot (tela de entrada, também libera a música) -->
+    <!-- O JS (parte 9) escreve as linhas dentro do <pre id="boot-log"> letra por letra
+         e depois revela o botão. O atributo `hidden` esconde o botão até lá.
+         <pre> mantém quebras de linha e espaços, ideal para "terminal".
+         role="dialog" + aria-label: avisam leitores de tela que é uma janela sobreposta.
+         Esta tela também serve para o navegador liberar o áudio: ele só deixa
+         tocar som depois de um clique do usuário. -->
     <div id="boot" class="boot" role="dialog" aria-label="Iniciar sistema">
         <pre id="boot-log"></pre>
         <button id="boot-btn" class="boot-btn" hidden>[ INICIAR SISTEMA ]</button>
     </div>
 
+    <!-- [2] Mira: uma div vazia que o JS move junto do mouse (só em telas com mouse).
+         aria-hidden="true" = leitores de tela ignoram (é puro enfeite). -->
     <div id="mira" class="mira" aria-hidden="true"></div>
 
-    <!-- Pod 042: assistente que comenta suas ações (clique nele para ouvir dicas) -->
+    <!-- [3] Pod 042: assistente que comenta suas ações (clique nele para ouvir dicas) -->
+    <!-- pod-corpo = o botão "042". pod-fala = o balão de texto, que o JS preenche
+         com falar('...'). aria-live="polite" faz leitores de tela lerem cada fala nova. -->
     <div class="pod">
         <button id="pod-corpo" class="pod-corpo" aria-label="Pod 042: ouvir uma dica">042</button>
         <p id="pod-fala" class="pod-fala" role="status" aria-live="polite"></p>
     </div>
 
-    <!-- Botões flutuantes -->
+    <!-- [4] Botões flutuantes (position: fixed no CSS: ficam no canto sem rolar) -->
+    <!-- O 🔇 inicial é trocado por 🔊 pelo JS quando a música toca.
+         aria-pressed informa "ligado/desligado" para leitores de tela. -->
     <button id="btn-musica" class="btn-flutuante btn-musica" aria-label="Ligar ou desligar a música" aria-pressed="false">🔇</button>
     <button id="btn-carrinho" class="btn-flutuante btn-carrinho" aria-label="Abrir carrinho">
         🛒
+        <!-- Bolinha com o total de itens. A classe "oculto" some com ela quando é 0
+             (o JS liga/desliga essa classe no atualizar()). -->
         <span id="carrinho-contador" class="contador oculto">0</span>
     </button>
 
+    <!-- Fundo escuro atrás do painel; clicar nele fecha o carrinho -->
     <div id="overlay" class="overlay"></div>
 
-    <!-- Painel lateral do carrinho (itens entram via JS) -->
+    <!-- [5] Painel lateral do carrinho (itens entram via JS) -->
+    <!-- <aside> = conteúdo "ao lado". Fica escondido fora da tela no CSS e a classe
+         "aberto" (colocada pelo JS) o desliza para dentro.
+         Só a div id="carrinho-itens" está vazia de propósito: o atualizar() a enche. -->
     <aside id="painel-carrinho" class="painel-carrinho" aria-label="Carrinho de compras">
         <div class="carrinho-header">
             <h2>Inventário</h2>
@@ -49,7 +93,9 @@
         </div>
     </aside>
 
-    <!-- ========== TELA INICIAL: header + carrosséis ========== -->
+    <!-- ========== [6] TELA INICIAL: header + carrosséis ========== -->
+    <!-- DICA: a tela inicial mostra só até o carrossel. Isso é feito no CSS
+         (provavelmente min-height: 100vh nesta section; 100vh = 100% da altura da tela). -->
     <section class="inicio">
         <header>
             <div class="conteudo-header">
@@ -57,6 +103,9 @@
                     <img src="img/logoyorha.png" id="logoYorha" alt="Logo Yorha">
                     Yorha Manga &amp; Figures
                 </h1>
+                <!-- ATENÇÃO: este parágrafo é lido pelo JS (document.querySelector('.conteudo-header p')),
+                     apagado e "digitado" de novo letra por letra. Se mudar a classe
+                     .conteudo-header ou tirar o <p>, o JS quebra. Pode editar o TEXTO à vontade. -->
                 <p>
                     O seu ponto de abastecimento definitivo na Terra. Especializada nos universos de
                     NieR:Automata e nos mangás mais aclamados, a Yorha entrega colecionáveis de
@@ -68,26 +117,40 @@
         </header>
 
         <!-- As imagens são criadas pelo JS a partir da lista de produtos -->
+        <!-- Cada "faixa" é uma janela com overflow escondido; dentro, o .track é a
+             fita de imagens que se move com @keyframes. track-direita e
+             track-esquerda só mudam o SENTIDO da animação (definido no CSS).
+             Para uma terceira faixa, copie uma linha e crie a classe no CSS. -->
         <div class="faixa"><div class="track track-direita"></div></div>
         <div class="faixa"><div class="track track-esquerda"></div></div>
 
+        <!-- href="#loja" rola até o elemento com id="loja" (a section mais abaixo).
+             Nenhum JS necessário: é uma âncora nativa do HTML. -->
         <a href="#loja" class="ver-produtos">Acessar acervo ↓</a>
     </section>
 
-    <!-- ========== LOJA ========== -->
+    <!-- ========== [7] LOJA ========== -->
     <section id="loja">
+        <!-- Menu: cada link rola até o id da coluna correspondente (#figures / #mangas) -->
         <nav aria-label="Categorias">
             <a href="#figures">Action Figures</a>
             <a href="#mangas">Mangás</a>
         </nav>
 
+        <!-- .tabelas deixa as duas colunas lado a lado (display: flex ou grid no CSS).
+             O JS escuta cliques AQUI (document.querySelector('.tabelas')), então
+             este nome de classe é importante. -->
         <div class="tabelas">
             <div class="coluna" id="figures">
                 <h2>Action Figures</h2>
                 <table>
                     <thead>
+                        <!-- <span class="so-leitor">: texto visível só para leitores de tela
+                             (a coluna da imagem não tem título visual, mas precisa ter nome). -->
                         <tr><th><span class="so-leitor">Imagem</span></th><th>Produto</th><th>Preço</th><th>Quantidade</th><th>Total</th></tr>
                     </thead>
+                    <!-- <tbody> vazio de propósito: o JS cria as linhas a partir da lista `produtos`.
+                         Para mudar a LISTA de produtos, edite o JS, não o HTML. -->
                     <tbody id="lista-figures"></tbody>
                 </table>
             </div>
@@ -103,17 +166,26 @@
             </div>
         </div>
 
+        <!-- Rodapé com resumo: o JS atualiza os dois spans a cada mudança no carrinho -->
         <footer>
             <span id="rodape-itens">0 itens</span>
             <strong>Subtotal: <span id="rodape-subtotal">R$ 0,00</span></strong>
         </footer>
     </section>
 
+    <!-- [8] Toast: aviso que aparece e some sozinho (mensagens de "pedido enviado", etc.) -->
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+    <!-- [9] Música -->
     <!-- Renomeie o seu mp3 para audio/trilha.mp3 (ou mude o caminho aqui) -->
+    <!-- DICA: nomes com espaços e símbolos funcionam, mas arquivos como
+         "trilha.mp3" evitam problemas ao publicar o site.
+         loop = repete sempre. preload="none" = só baixa quando for tocar (página abre mais rápido). -->
     <audio id="trilha" src="audio/A Beautiful Song (NieRAutomata Original Soundtrack)【Audio】 - SQUARE ENIX MUSIC Channel.mp3" loop preload="none"></audio>
 
+    <!-- [10] O script fica no FINAL do <body> de propósito: assim todos os elementos
+         acima já existem quando o JS roda e $('id') os encontra.
+         (Se colocasse no <head>, precisaria do atributo defer.) -->
     <script src="java/index.js"></script>
 </body>
 </html>
