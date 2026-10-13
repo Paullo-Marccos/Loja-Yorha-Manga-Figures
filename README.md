@@ -70,3 +70,6 @@ Web Storage API (localStorage) para salvar itens do carrinho e preferências do 
 Desenvolvido por Paullo-Marccos
 
 Glória à Humanidade. 🗡️
+
+👤 Autor
+Criado por Paullo-Marccos.
