@@ -71,5 +71,7 @@ Desenvolvido por Paullo-Marccos
 
 Glória à Humanidade. 🗡️
 
+OBS:"Refiz o projeto com o auxílio de IA, mas esqueci-me de guardar a versão original. Por esse motivo, não é possível fazer uma comparação do tipo 'antes vs. depois'."
+
 👤 Autor
 Criado por Paullo-Marccos.
